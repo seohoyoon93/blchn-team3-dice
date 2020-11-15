@@ -1,0 +1,30 @@
+.landing {
+  padding-top: 148px;
+  h1 {
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 48px;
+    color: $gray;
+    text-align: center;
+  }
+
+  .signin-btn {
+    margin-left: auto;
+    margin-right: auto;
+    width: 540px;
+    height: 96px;
+    button {
+      margin-top: 440px;
+      margin-left: auto;
+      margin-right: auto;
+      width: 540px;
+      height: 96px;
+      border-radius: 12px;
+      background-color: $orange;
+      font-size: 36px;
+      color: #fff;
+      text-align: center;
+      cursor: pointer;
+    }
+  }
+}
