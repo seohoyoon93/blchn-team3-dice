@@ -3,7 +3,7 @@ import { Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
 import Landing from "../pages/Landing";
-import Roll from "../pages/Roll";
+import Roll from "../pages/roll";
 import Waiting from "../pages/Waiting";
 import Result from "../pages/Result";
 
@@ -31,6 +31,7 @@ const mapStateToProps = (state) => {
   console.log(state);
   return {
     account: state.user.account,
+    balance: state.user.balance,
   };
 };
 
