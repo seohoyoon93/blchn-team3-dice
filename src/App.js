@@ -5,7 +5,9 @@ class App extends React.Component {
 
   render() {
     return (
-      <PageView />
+      <div className="App">
+        <PageView />
+      </div>
     );
   }
 }
