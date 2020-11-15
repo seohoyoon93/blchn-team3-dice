@@ -1,9 +1,13 @@
-function App() {
-  return (
-    <div className="App">
-      Blockchain Team 3 Dice Project
-    </div>
-  );
+import React from 'react'
+import PageView from './components/PageView';
+
+class App extends React.Component {
+
+  render() {
+    return (
+      <PageView />
+    );
+  }
 }
 
 export default App;
