@@ -1,0 +1,68 @@
+.roll {
+  text-align: center;
+}
+
+.dice2 {
+  height: 10vmin;
+  pointer-events: none;
+  margin-bottom: 10vmin;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .dice2 {
+    animation: dice-spin infinite 20s linear;
+  }
+}
+
+.roll-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(20px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes dice-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.balance {
+  margin-bottom: 10vmin;
+}
+
+.rollButton {
+  color: white;
+  width: 30vmin;
+  height: 10vmin;
+  background-color: red;
+  border-radius: 10px;
+  font-size: 35px;
+}
+
+.Boxes {
+  margin-top: 10vmin;
+  margin-bottom: 10vmin;
+  display: flex;
+  grid-gap: 3vmin;
+}
+.Box {
+  display: flex;
+  width: 15vmin;
+  height: 9vmin;
+  align-items: center;
+  justify-content: center;
+  background-color: green;
+  border-radius: 10px;
+  font-size: 20px;
+}
