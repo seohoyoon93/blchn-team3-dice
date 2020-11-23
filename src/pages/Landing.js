@@ -26,7 +26,8 @@ class Landing extends Component {
       .then(response => {
         const account = response[0]
         web3.eth.getBalance(account)
-          .then(balance => {
+          .then(weiBalance => {
+            const balance = weiBalance / 1000000000000000000
             this.props.setUser({ account, balance })
             localStorage.setItem(
               "eth-account-address",

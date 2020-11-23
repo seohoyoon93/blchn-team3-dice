@@ -22,6 +22,14 @@ class App extends React.Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.account !== this.props.account) {
+
+    }
+  }
+  // if (window.ethereum.on('accountsChanged', function (accounts) {
+  //     // Time to reload your interface with accounts[0]!
+  //   })
   render() {
     return (
       <div className="App">
@@ -31,11 +39,18 @@ class App extends React.Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    account: state.user.account,
+    balance: state.user.balance,
+  };
+};
+
 const mapDispatchToProps = dispatch => {
   return {
     setUser: user => dispatch(setUser(user))
   }
 }
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
 

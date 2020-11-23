@@ -1,0 +1,77 @@
+.roll {
+  text-align: center;
+}
+
+.dice2 {
+  height: 10vmin;
+  pointer-events: none;
+  margin-bottom: 10vmin;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .dice2 {
+    animation: dice-spin infinite 20s linear;
+  }
+}
+
+.roll-header {
+  background-color: $blue;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(20px + 2vmin);
+  color: $gray;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes dice-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.balance {
+  margin-bottom: 10vmin;
+}
+
+.rollButton {
+  color: #fff;
+  width: 330px;
+  height: 100px;
+  background-color: $red;
+  border-radius: 10px;
+  font-size: 44px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.Boxes {
+  margin-top: 10vmin;
+  margin-bottom: 10vmin;
+  display: flex;
+  grid-gap: 3vmin;
+}
+.Box {
+  display: flex;
+  width: 180px;
+  height: 72px;
+  align-items: center;
+  justify-content: center;
+  background-color: $lightgreen;
+  border-radius: 10px;
+  font-size: 36px;
+  color: #fff;
+  cursor: pointer;
+  filter: drop-shadow(0 4px 4px $lightgreen);
+  &.selected {
+    background-color: $green;
+    filter: none;
+  }
+}
