@@ -67,7 +67,6 @@ class Roll extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log(state);
   return {
     account: state.user.account,
     balance: state.user.balance,

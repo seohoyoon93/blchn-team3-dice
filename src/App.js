@@ -1,35 +1,30 @@
 import React from 'react'
 import PageView from './components/PageView';
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import { setUser } from './store/actions/userActions'
 
+const WEI_TO_ETH = 1000000000000000000
+const Web3 = require('web3')
+
 class App extends React.Component {
-  state = {
-    loading: true
-  }
-
   componentDidMount() {
-    const account = localStorage.getItem('eth-account-address')
-    const balance = localStorage.getItem('eth-balance')
-
-    if (account !== null) {
-      this.props.setUser({ account, balance })
-      this.setState({ loading: false })
-    } else {
-      localStorage.removeItem('eth-account-address');
-      localStorage.removeItem('eth-balance');
-      this.setState({ loading: false })
-    }
+    window.ethereum.on('accountsChanged', accounts => {
+      if (accounts[0]) {
+        const account = accounts[0]
+        const web3 = new Web3(Web3.givenProvider)
+        web3.eth.getBalance(account)
+          .then(weiBalance => {
+            const balance = weiBalance / WEI_TO_ETH
+            this.props.setUser({ account, balance })
+            this.props.history.push('/roll')
+          })
+      } else {
+        this.props.setUser({ account: null, balance: 0 })
+      }
+    })
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.account !== this.props.account) {
-
-    }
-  }
-  // if (window.ethereum.on('accountsChanged', function (accounts) {
-  //     // Time to reload your interface with accounts[0]!
-  //   })
   render() {
     return (
       <div className="App">
@@ -52,5 +47,5 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App));
 

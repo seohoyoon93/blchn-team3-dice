@@ -4,8 +4,11 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
 import { setUser } from '../store/actions/userActions'
+
+const Web3 = require('web3')
 const forwarderOrigin = 'http://localhost:3000'
 const onboarding = new MetaMaskOnboarding({ forwarderOrigin })
+const WEI_TO_ETH = 1000000000000000000
 
 const isMetaMaskInstalled = () => {
   const { ethereum } = window
@@ -20,23 +23,14 @@ class Landing extends Component {
   }
 
   signInWithMetamask = () => {
-    const Web3 = require('web3')
     const web3 = new Web3(Web3.givenProvider)
     window.ethereum.request({ method: 'eth_requestAccounts' })
       .then(response => {
         const account = response[0]
         web3.eth.getBalance(account)
           .then(weiBalance => {
-            const balance = weiBalance / 1000000000000000000
+            const balance = weiBalance / WEI_TO_ETH
             this.props.setUser({ account, balance })
-            localStorage.setItem(
-              "eth-account-address",
-              account
-            );
-            localStorage.setItem(
-              "eth-balance",
-              balance
-            );
             this.props.history.push('/roll')
           })
       })

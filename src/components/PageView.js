@@ -8,27 +8,25 @@ import Waiting from "../pages/Waiting";
 import Result from "../pages/Result";
 
 const PageView = (props) => {
-  console.log(props);
   return (
     <div className="pageview">
       <Route exact path="/">
         {props.account !== null ? <Redirect to="/roll" /> : <Landing />}
       </Route>
       <Route exact path="/roll">
-        <Roll />
+        {props.account !== null ? <Roll /> : <Redirect to="/" />}
       </Route>
-      <Route exact path="/Waiting">
-        <Waiting />
+      <Route exact path="/waiting">
+        {props.account !== null ? <Waiting /> : <Redirect to="/" />}
       </Route>
       <Route exact path="/result">
-        <Result />
+        {props.account !== null ? <Result /> : <Redirect to="/" />}
       </Route>
     </div>
   );
 };
 
 const mapStateToProps = (state) => {
-  console.log(state);
   return {
     account: state.user.account,
     balance: state.user.balance,
