@@ -33,7 +33,7 @@ class Roll extends Component {
       // console.log("deployedNetwork: ", deployedNetwork)
       const instance = new web3.eth.Contract(
         RollDice.abi,
-        "0xB00240158164627027A95AaC3F35c09Ed71f7231"
+        "0xf8f2586D2eCF43425641Ea47392775E9754623Bd"
       )
 
       this.setState({ web3: web3, contract: instance });
@@ -112,11 +112,13 @@ class Roll extends Component {
     const boxClass5 = this.state.idx === 4 ? "Box selected" : "Box"
     const resultDiv = this.state.winAmount !== null ? (
       <div className="result">
-        <div className="win-amount">
-          {this.state.winAmount} ETH
+        <div className="result-column">
+          <div className="title">Win Amount: </div>
+          <div className="amount">{this.state.winAmount} ETH</div>
         </div>
-        <div className="dice-number">
-          {this.state.diceNum}
+        <div className="result-column">
+          <div className="title">Dice Number: </div>
+          <div className="amount">{this.state.diceNum}</div>
         </div>
       </div>
     ) : (

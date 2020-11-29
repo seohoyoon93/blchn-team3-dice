@@ -12774,10 +12774,80 @@
       "links": {},
       "address": "0xB00240158164627027A95AaC3F35c09Ed71f7231",
       "transactionHash": "0xf1d1f24f1b0cfdd6440c3b682a7875a526aafdb8f7f727a3f773a116f8fe986b"
+    },
+    "1606661760750": {
+      "events": {
+        "0xac464fe4d3a86b9121261ac0a01dd981bfe0777c7c9d9c8f4473d31a9c0f9d2d": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "beneficiary",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "name": "FailedPayment",
+          "type": "event"
+        },
+        "0xd4f43975feb89f48dd30cabbb32011045be187d1e11c8ea9faa43efc35282519": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "beneficiary",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "name": "Payment",
+          "type": "event"
+        },
+        "0xbd515cb7fe6810ea1d996c4efb3231c8b281498ca8062a4ec905d41943824bdf": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "gambler",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "diceNum",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "amount",
+              "type": "uint256"
+            }
+          ],
+          "name": "Reveal",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0xf8f2586D2eCF43425641Ea47392775E9754623Bd",
+      "transactionHash": "0x414ed9f700117fcf7527b97081886a3c614488dbcbea52127252bcce01ecc138"
     }
   },
   "schemaVersion": "3.3.2",
-  "updatedAt": "2020-11-29T12:52:31.425Z",
+  "updatedAt": "2020-11-29T14:56:16.149Z",
   "networkType": "ethereum",
   "devdoc": {
     "methods": {}

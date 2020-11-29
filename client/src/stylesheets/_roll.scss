@@ -75,3 +75,20 @@
     filter: none;
   }
 }
+
+.result {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-bottom: 16px;
+  .result-column {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-right: 24px;
+    font-size: 36px;
+    font-weight: bold;
+  }
+}
