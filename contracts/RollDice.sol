@@ -1,6 +1,6 @@
-pragma solidity >=0.6.0;
+pragma solidity >=0.4.21 <0.7.0;
 
-contract rollDice {
+contract RollDice {
     uint256 constant MAX_CASE = 6; //for dice
     uint256 constant MIN_BET = 0.01 ether;
     uint256 constant MAX_BET = 10 ether;
@@ -12,7 +12,6 @@ contract rollDice {
 
     struct Bet {
         uint256 amount;
-        uint256 placeBlockNumber;
         address payable gambler;
         uint256 winningAmount;
         uint256 diceNum;
@@ -20,7 +19,7 @@ contract rollDice {
 
     mapping(address => Bet) bets;
 
-    event Reveal(address indexed gambler, uint256 reveal, uint256 amount);
+    event Reveal(address indexed gambler, uint256 diceNum, uint256 amount);
     event Payment(address indexed beneficiary, uint256 amount);
     event FailedPayment(address indexed beneficiary, uint256 amount);
 
@@ -60,97 +59,98 @@ contract rollDice {
         selfdestruct(owner);
     }
 
-    receive() external payable {} //function for receiving contract's initial operating funds.
+    // receive() external payable {} //function for receiving contract's initial operating funds.
 
-    function placeBet() external payable {
-        uint256 amount = msg.value;
+    // function placeBet() external payable {
+    //     uint256 amount = msg.value;
 
-        require(
-            amount >= MIN_BET && amount <= MAX_BET,
-            "Amount is out of range."
-        );
+    //     require(
+    //         amount >= MIN_BET && amount <= MAX_BET,
+    //         "Amount is out of range."
+    //     );
 
-        Bet storage bet = bets[msg.sender]; //mapping bets(address=>bets)
+    //     Bet storage bet = bets[msg.sender]; //mapping bets(address=>bets)
 
-        require(bet.gambler == address(0), "Bet should be empty state.");
-        //address(0) = null in address type.
+    //     require(bet.gambler == address(0), "Bet should be empty state.");
+    //     //address(0) = null in address type.
 
-        uint256 possibleWinningAmount = 2 * amount;
-        lockedInBets += possibleWinningAmount;
+    //     uint256 possibleWinningAmount = 2 * amount;
+    //     lockedInBets += possibleWinningAmount;
 
-        require(
-            lockedInBets < address(this).balance,
-            "Cannot afford to pay the bet."
-        );
+    //     require(
+    //         lockedInBets < address(this).balance,
+    //         "Cannot afford to pay the bet."
+    //     );
 
-        bet.amount = amount;
-        bet.placeBlockNumber = block.number;
-        bet.gambler = msg.sender;
-    }
+    //     bet.amount = amount;
+    //     bet.placeBlockNumber = block.number;
+    //     bet.gambler = msg.sender;
+    // }
 
-    function getWinningAmount(uint256 amount, uint8 seed)
+    function getWinningAmount(uint256 amount)
         private
-        returns (uint256 winningAmount)
+        returns (uint256, uint256)
     {
         Bet storage bet = bets[msg.sender];
-        uint256 placeBlockNumber = bet.placeBlockNumber;
+        bet.gambler = msg.sender;
+
         uint256 housefee = (amount * HOUSE_FEE_PERCENT) / 100;
+        uint256 reward;
 
         if (housefee < HOUSE_MIN_FEE) {
             housefee = HOUSE_MIN_FEE;
         }
 
-        bytes32 random = keccak256(
+        uint256 random = uint256(keccak256(
             abi.encodePacked(
-                blockhash(block.number - seed),
-                blockhash(placeBlockNumber)
+                block.timestamp
             )
-        );
+        ));
 
-        uint256 reveal = uint256(random) % MAX_CASE;
-        uint256 reward;
-
-        if (reveal == 0) {
-            reward = amount / 20;
+        uint256 tt = random % 6;
+        
+        if (tt == 0) {
+            reward = 0;
         }
 
-        if (reveal == 1) {
+        if (tt == 1) {
             reward = amount / 2;
         }
 
-        if (reveal == 2 || reveal == 3) {
+        if (tt == 2 || tt == 3) {
             reward = amount;
         }
 
-        if (reveal == 4) {
+        if (tt == 4) {
             reward = (amount * 3) / 2;
         }
 
-        if (reveal == 5) {
+        if (tt == 5) {
             reward = amount * 2;
         }
 
-        winningAmount = reward - housefee;
+        uint256 winningAmount = (reward > housefee) ? reward - housefee : reward;
+        uint256 diceNum = tt + 1;
+        bet.diceNum = diceNum;
         bet.winningAmount = winningAmount;
-        bet.diceNum = reveal;
+        return (winningAmount, diceNum);
     }
 
-    function revealResult() external {
+    function revealResult() external payable {
+        uint256 amount = msg.value;
+        require(
+            amount >= MIN_BET && amount <= MAX_BET,
+            "Amount is out of range."
+        );
         Bet storage bet = bets[msg.sender];
-        uint256 amount = bet.amount;
-        uint256 placeBlockNumber = bet.placeBlockNumber;
+        // bet.gambler = msg.sender;
         address payable gambler = bet.gambler;
-        uint256 diceNum = bet.diceNum;
 
         require(amount > 0, "Bet should be in an 'active' state.");
-        require(
-            block.number > placeBlockNumber,
-            "revealResult in the same block as placeBet, or before"
-        );
 
-        uint256 winningAmount = bet.winningAmount;
+        (uint256 winningAmount, uint256 diceNum) = getWinningAmount(amount);
 
-        emit Reveal(gambler, diceNum + 1, winningAmount);
+        emit Reveal(bet.gambler, bet.diceNum, bet.winningAmount);
         if (winningAmount > 0) {
             sendFunds(gambler, winningAmount);
         }
@@ -162,7 +162,6 @@ contract rollDice {
         Bet storage bet = bets[player];
 
         bet.amount = 0;
-        bet.placeBlockNumber = 0;
         bet.winningAmount = 0;
         bet.gambler = address(0);
     }
@@ -171,10 +170,6 @@ contract rollDice {
         Bet storage bet = bets[msg.sender];
         uint256 amount = bet.amount;
         address payable gambler = bet.gambler;
-        require(
-            block.number > bet.placeBlockNumber,
-            "refundBet in the same block as placeBet, or before."
-        );
         require(amount > 0, "Bet should be in an 'active' state.");
         uint256 possibleWinningAmount;
         possibleWinningAmount = bet.winningAmount;
